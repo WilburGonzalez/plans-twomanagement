@@ -1,0 +1,5 @@
+# plans.twomanagement.com — private planning pages for Two Management agents.
+# Each agent has a personal link from Wilbur. Please do not index or follow anything on this site.
+# (The pages also carry a noindex,nofollow meta tag.)
+User-agent: *
+Disallow: /
