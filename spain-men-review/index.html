@@ -10,7 +10,7 @@ th.grp,td.grp{border-left:2px solid var(--rule)}
 select,input{font:inherit;font-size:13px;padding:3px 4px;background:transparent;color:var(--ink);border:1px solid var(--rule);border-radius:3px;height:26px}select{width:74px}input{width:86px;transition:width .15s}input:focus{width:240px;background:var(--field)}
 td.c-Drop,td.c-Big{background:var(--red)!important}td.c-Keep,td.c-No{background:var(--grn)!important}td.c-Unsure,td.c-Little{background:var(--yel)!important}td.c-Push{background:var(--blu)!important}
 #status{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--rule);padding:6px 0;color:var(--soft);font-size:12px}
-.tally{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 0;color:var(--soft);font-size:12px}.tbox{border:1px solid var(--rule);border-radius:6px;padding:4px 8px;display:flex;gap:6px;align-items:center}.tbox .tl{font-weight:700;color:var(--ink);margin-right:4px}.tbox .tl span{font-weight:400;color:var(--soft)}.tc{padding:1px 6px;border-radius:4px}.tally b{color:var(--ink)}
+.tally{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;margin:8px 0 0;color:var(--soft);font-size:12px}.tbox{border:1px solid var(--rule);border-radius:6px;padding:4px 8px;display:flex;gap:6px;align-items:center}.tbox .tl{font-weight:700;color:var(--ink);margin-right:4px}.tbox .tl span{font-weight:400;color:var(--soft)}.tc{padding:1px 6px;border-radius:4px}.fbox{margin-left:auto;border:3px double var(--ink);border-radius:6px;padding:4px 10px}.fbox .tl{font-weight:700;color:var(--ink)}.fbox .tl span{font-weight:400;color:var(--soft)}.ft{border-collapse:collapse;font-size:12px;margin-top:2px}.ft th{font-weight:600;color:var(--soft);padding:1px 8px;text-align:right}.ft th:first-child{text-align:left}.ft td{padding:1px 8px;text-align:right;border-top:1px solid var(--rule)}.ft td:first-child{text-align:left;font-weight:600}.ft tr.tt td{border-top:2px solid var(--ink)}.tally b{color:var(--ink)}
 :focus-visible{outline:2px solid var(--acc);outline-offset:1px}</style></head><body><main>
 <h1>Spain Men — drop review</h1>
 <p class="sub">88 men on the Main and New Faces boards. <span class="crit">Criteria: signed on or before 31 Dec 2024 · zero jobs from 1 Oct 2023 to 30 Sep 2026 · 3 options or fewer in that time.</span> Options = options + direct options (cancelled included); the total also counts Oct–Dec 2023; jobs exclude cancelled. Source: Mediaslide database export, 29 Sep 2026.</p>
@@ -34,9 +34,13 @@ function render(){const ORD={Drop:0,Unsure:1,Keep:2,Push:3,"Big debt":0,"Little 
  fill();document.querySelectorAll("select,input").forEach(el=>{el.oninput=()=>onEdit(el)})}
 function colorize(el){if(el.tagName!=="SELECT")return;const v=(el.value||"").split(" ")[0];const td=el.closest("td");td.className=td.className.replace(/\bc-\w+/g,"").trim();if(v)td.classList.add("c-"+v)}
 function fill(){document.querySelectorAll("select,input").forEach(el=>{const v=(local[el.dataset.id]||{})[el.dataset.k];el.value=v||"";colorize(el)});tally()}
-function tally(){const N=ROWS.length;const G=[["ana","Ana",["Drop","Unsure","Keep"]],["wilbur","Wilbur",["Drop","Unsure","Keep"]],["decision","FINAL",["Drop","Push","Keep"]]];
- $("#tally").innerHTML=G.map(([k,l,opts])=>{const c={};let done=0;for(const id in local){const v=(local[id]||{})[k];if(v){c[v]=(c[v]||0)+1;done++}}
- return `<div class="tbox"><div class="tl">${l} <span>${done}/${N}</span></div>${opts.map(o=>`<span class="tc c-${o.split(" ")[0]}">${o.replace(" debt","")} <b>${c[o]||0}</b></span>`).join("")}</div>`}).join("")}
+function tally(){const N=ROWS.length;const G=[["ana","Ana",["Drop","Unsure","Keep"]],["wilbur","Wilbur",["Drop","Unsure","Keep"]]];
+ const boxes=G.map(([k,l,opts])=>{const c={};let done=0;for(const id in local){const v=(local[id]||{})[k];if(v){c[v]=(c[v]||0)+1;done++}}
+ return `<div class="tbox"><div class="tl">${l} <span>${done}/${N}</span></div>${opts.map(o=>`<span class="tc c-${o.split(" ")[0]}">${o} <b>${c[o]||0}</b></span>`).join("")}</div>`}).join("");
+ const B=["Main","Image","New Faces"],F=["Drop","Push","Keep"];const m={};let done=0;ROWS.forEach(r=>{const v=(local[r.id]||{}).decision;if(v){done++;m[v+"|"+r.board]=(m[v+"|"+r.board]||0)+1}});
+ const tot=b=>F.reduce((a,o)=>a+(m[o+"|"+b]||0),0);
+ const fin=`<div class="fbox"><div class="tl">FINAL <span>${done}/${N}</span></div><table class="ft"><tr><th></th>${B.map(b=>`<th>${b}</th>`).join("")}<th>Total</th></tr>${F.map(o=>`<tr><td class="c-${o}">${o}</td>${B.map(b=>`<td>${m[o+"|"+b]||0}</td>`).join("")}<td><b>${F.length?B.reduce((a,b)=>a+(m[o+"|"+b]||0),0):0}</b></td></tr>`).join("")}<tr class="tt"><td>Total</td>${B.map(b=>`<td>${tot(b)}</td>`).join("")}<td><b>${done}</b></td></tr></table></div>`;
+ $("#tally").innerHTML=boxes+fin}
 let queue={},timer=null;
 function onEdit(el){const id=el.dataset.id,k=el.dataset.k;local[id]=local[id]||{};local[id][k]=el.value;touched[id+"|"+k]=Date.now();colorize(el);tally();
  queue[id]=queue[id]||{};queue[id][FIELDS[k]]=el.value||null;queue[id]["Updated"]=new Date().toISOString();$("#status").textContent="Saving…";clearTimeout(timer);timer=setTimeout(flush,900)}
