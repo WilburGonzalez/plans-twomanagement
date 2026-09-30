@@ -57,14 +57,19 @@ function xcsv(){const {rows,lbl,a}=xrows();const q=v=>`"${String(v||"").replace(
  const el=document.createElement("a");el.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));el.download=`${lbl.replace(/[^A-Za-z]/g,"")}_${a||"all"}_${new Date().toISOString().slice(0,10)}.csv`;el.click()}
 document.addEventListener("DOMContentLoaded",()=>{$("#xo").onclick=xopen;$("#xc").onclick=xcsv});
 let queue={},timer=null;
-function onEdit(el){const id=el.dataset.id,k=el.dataset.k;local[id]=local[id]||{};local[id][k]=el.value;touched[id+"|"+k]=Date.now();colorize(el);tally();
+function onEdit(el){const id=el.dataset.id,k=el.dataset.k;local[id]=local[id]||{};local[id][k]=el.value;touched[id+"|"+k]=Date.now();remember(id,k,el.value);colorize(el);tally();
  queue[id]=queue[id]||{};queue[id][FIELDS[k]]=el.value||null;queue[id]["Updated"]=new Date().toISOString();$("#status").textContent="Saving…";clearTimeout(timer);timer=setTimeout(flush,900)}
 async function flush(){const recs=Object.entries(queue).map(([id,fields])=>({id,fields}));queue={};if(!recs.length)return;
  try{for(let i=0;i<recs.length;i+=10){const rs=await fetch(API,{method:"PATCH",headers:{"Authorization":"Bearer "+AT,"Content-Type":"application/json"},body:JSON.stringify({records:recs.slice(i,i+10),typecast:true})});if(!rs.ok)throw new Error("HTTP "+rs.status)}
   $("#status").textContent="Saved to Airtable "+new Date().toLocaleTimeString()+". Other people's answers appear here within a minute or two."}
  catch(e){$("#status").textContent="Could not save ("+e.message+") — check your connection and change the cell again."}}
-async function load(){try{const r=await fetch("state.json?v="+Date.now(),{cache:"no-store"});if(!r.ok)return;const s=await r.json();const now=Date.now();
- for(const id in s.rows){local[id]=local[id]||{};for(const k in FIELDS){if(now-(touched[id+"|"+k]||0)>180000)local[id][k]=s.rows[id][k]||""}}
- document.activeElement&&document.activeElement.blur&&null;fill();if(s.updated)$("#upd").textContent="Answers last synced "+new Date(s.updated).toLocaleString()}catch(e){}}
-render();load();setInterval(load,60000);
+const LSK="drop-review-edits:"+location.pathname;let mine={};try{mine=JSON.parse(localStorage.getItem(LSK)||"{}")}catch(e){}
+function remember(id,k,v){mine[id]=mine[id]||{};mine[id][k]={v,t:Date.now()};try{localStorage.setItem(LSK,JSON.stringify(mine))}catch(e){}}
+async function fetchState(){const urls=["https://api.github.com/repos/WilburGonzalez/plans-twomanagement/contents/"+location.pathname.replace(/^\/|\/$/g,"")+"/state.json?ref=main&v="+Date.now(),"state.json?v="+Date.now()];
+ for(const u of urls){try{const r=await fetch(u,{cache:"no-store",headers:u.includes("api.github")?{Accept:"application/vnd.github.raw+json"}:{}});if(r.ok)return await r.json()}catch(e){}}return null}
+async function load(){try{const s=await fetchState();if(!s)return;const now=Date.now();
+ for(const id in s.rows){local[id]=local[id]||{};const rowT=Date.parse(s.rows[id].updated||0)||0;for(const k in FIELDS){if(now-(touched[id+"|"+k]||0)<180000)continue;const m=(mine[id]||{})[k];if(m&&m.t>rowT+5000){local[id][k]=m.v;continue}local[id][k]=s.rows[id][k]||""}}
+ fill();if(s.updated)$("#upd").textContent="Answers last synced "+new Date(s.updated).toLocaleString()}catch(e){}}
+(function(){for(const id in mine)for(const k in mine[id]){local[id]=local[id]||{};local[id][k]=mine[id][k].v}})();
+render();load();setInterval(load,90000);
 </script></body></html>
