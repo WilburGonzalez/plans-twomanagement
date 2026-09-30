@@ -34,7 +34,7 @@ function render(){const ORD={Drop:0,Unsure:1,Keep:2,Push:3,"Big debt":0,"Little 
  fill();document.querySelectorAll("select,input").forEach(el=>{el.oninput=()=>onEdit(el)})}
 function colorize(el){if(el.tagName!=="SELECT")return;const v=(el.value||"").split(" ")[0];const td=el.closest("td");td.className=td.className.replace(/\bc-\w+/g,"").trim();if(v)td.classList.add("c-"+v)}
 function fill(){document.querySelectorAll("select,input").forEach(el=>{const v=(local[el.dataset.id]||{})[el.dataset.k];el.value=v||"";colorize(el)});tally()}
-function tally(){const N=ROWS.length;const G=[["ana","Ana",["Drop","Unsure","Keep"]],["wilbur","Wilbur",["Drop","Unsure","Keep"]],["ani","Ani debt",["Big debt","Little debt","No debt"]],["decision","FINAL",["Drop","Push","Keep"]]];
+function tally(){const N=ROWS.length;const G=[["ana","Ana",["Drop","Unsure","Keep"]],["wilbur","Wilbur",["Drop","Unsure","Keep"]],["decision","FINAL",["Drop","Push","Keep"]]];
  $("#tally").innerHTML=G.map(([k,l,opts])=>{const c={};let done=0;for(const id in local){const v=(local[id]||{})[k];if(v){c[v]=(c[v]||0)+1;done++}}
  return `<div class="tbox"><div class="tl">${l} <span>${done}/${N}</span></div>${opts.map(o=>`<span class="tc c-${o.split(" ")[0]}">${o.replace(" debt","")} <b>${c[o]||0}</b></span>`).join("")}</div>`}).join("")}
 let queue={},timer=null;
