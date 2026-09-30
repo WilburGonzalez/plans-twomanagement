@@ -10,7 +10,7 @@ th.grp,td.grp{border-left:2px solid var(--rule)}
 select,input{font:inherit;font-size:13px;padding:3px 4px;background:transparent;color:var(--ink);border:1px solid var(--rule);border-radius:3px;height:26px}select{width:74px}input{width:86px;transition:width .15s}input:focus{width:240px;background:var(--field)}
 td.c-Drop,td.c-Big{background:var(--red)!important}td.c-Keep,td.c-No{background:var(--grn)!important}td.c-Unsure,td.c-Little{background:var(--yel)!important}td.c-Push{background:var(--blu)!important}
 #status{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--rule);padding:6px 0;color:var(--soft);font-size:12px}
-.tally{display:flex;gap:16px;flex-wrap:wrap;margin:8px 0 0;color:var(--soft);font-size:12px}.tally b{color:var(--ink)}
+.tally{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 0;color:var(--soft);font-size:12px}.tbox{border:1px solid var(--rule);border-radius:6px;padding:4px 8px;display:flex;gap:6px;align-items:center}.tbox .tl{font-weight:700;color:var(--ink);margin-right:4px}.tbox .tl span{font-weight:400;color:var(--soft)}.tc{padding:1px 6px;border-radius:4px}.tally b{color:var(--ink)}
 :focus-visible{outline:2px solid var(--acc);outline-offset:1px}</style></head><body><main>
 <h1>Spain Men — drop review</h1>
 <p class="sub">54 men on the Main and New Faces boards. <span class="crit">Criteria: signed on or before 31 Dec 2023 · zero jobs from 1 Oct 2023 to 30 Sep 2026 · 3 options or fewer in that time.</span> Options = options + direct options (cancelled included); the total also counts Oct–Dec 2023; jobs exclude cancelled. Source: Mediaslide database export, 29 Sep 2026.</p>
@@ -34,8 +34,9 @@ function render(){const ORD={Drop:0,Unsure:1,Keep:2,Push:3,"Big debt":0,"Little 
  fill();document.querySelectorAll("select,input").forEach(el=>{el.oninput=()=>onEdit(el)})}
 function colorize(el){if(el.tagName!=="SELECT")return;const v=(el.value||"").split(" ")[0];const td=el.closest("td");td.className=td.className.replace(/\bc-\w+/g,"").trim();if(v)td.classList.add("c-"+v)}
 function fill(){document.querySelectorAll("select,input").forEach(el=>{const v=(local[el.dataset.id]||{})[el.dataset.k];el.value=v||"";colorize(el)});tally()}
-function tally(){const c={ana:{},wilbur:{},decision:{}};for(const id in local){for(const k of ["ana","wilbur","decision"]){const v=local[id][k];if(v)c[k][v]=(c[k][v]||0)+1}}
- const f=o=>Object.entries(o).map(([k,v])=>`${k} <b>${v}</b>`).join(" · ")||"—";$("#tally").innerHTML=`<span>Ana: ${f(c.ana)}</span><span>Wilbur: ${f(c.wilbur)}</span><span>Final: ${f(c.decision)}</span>`}
+function tally(){const N=ROWS.length;const G=[["ana","Ana",["Drop","Unsure","Keep"]],["wilbur","Wilbur",["Drop","Unsure","Keep"]],["ani","Ani debt",["Big debt","Little debt","No debt"]],["decision","FINAL",["Drop","Push","Keep"]]];
+ $("#tally").innerHTML=G.map(([k,l,opts])=>{const c={};let done=0;for(const id in local){const v=(local[id]||{})[k];if(v){c[v]=(c[v]||0)+1;done++}}
+ return `<div class="tbox"><div class="tl">${l} <span>${done}/${N}</span></div>${opts.map(o=>`<span class="tc c-${o.split(" ")[0]}">${o.replace(" debt","")} <b>${c[o]||0}</b></span>`).join("")}</div>`}).join("")}
 let queue={},timer=null;
 function onEdit(el){const id=el.dataset.id,k=el.dataset.k;local[id]=local[id]||{};local[id][k]=el.value;touched[id+"|"+k]=Date.now();colorize(el);tally();
  queue[id]=queue[id]||{};queue[id][FIELDS[k]]=el.value||null;queue[id]["Updated"]=new Date().toISOString();$("#status").textContent="Saving…";clearTimeout(timer);timer=setTimeout(flush,900)}
