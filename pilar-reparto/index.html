@@ -1,0 +1,72 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Reparto equipo – Pilar</title>
+<style>
+:root{--ink:#161616;--mute:#666;--line:#e3e3e3;--bg:#fff;--acc:#111}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
+main{max-width:920px;margin:0 auto;padding:20px 16px 80px}
+.brand{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mute)}
+h1{font-size:24px;margin:4px 0 10px}h2{font-size:17px;margin:26px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--acc)}
+.intro{background:#f5f5f5;border-radius:8px;padding:12px 14px;font-size:14px}
+.intro ul{margin:6px 0 0;padding-left:18px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.n{text-align:right;white-space:nowrap;color:var(--mute)}
+td.c b{display:block}td.c span{font-size:12px;color:var(--mute)}
+select,input{font:inherit;font-size:14px;padding:6px;border:1px solid #bbb;border-radius:6px;width:100%;background:#fff}
+td.s{width:150px}td.t{width:210px}
+.bar{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:0;background:var(--acc);color:#fff;cursor:pointer}
+button.sec{background:#e9e9e9;color:#111}#sent{font-size:14px;color:#0a6b2d}
+@media(max-width:640px){table,tbody,tr,td{display:block;width:100%}tr{border-bottom:1px solid var(--line);padding:8px 0}td{border:0;padding:3px 0}td.n{text-align:left;display:inline-block;width:auto;margin-right:12px}td.s,td.t{width:100%}}
+</style></head><body><main>
+<div class="brand">Two Management</div><h1>Clientes de Sol: reparto a tu equipo</h1>
+<div class="intro">Hola Pilar. Son 98 clientes de Sol para repartir entre Florencia, Kath y Paola. Tus propios clientes no están aquí.
+<ul><li><b>Propuesta</b>: ya viene elegida en el menú, según la facturación de los últimos 12 meses.</li>
+<li>Cambia el menú si quieres otra persona, o elige "Inactivo / quitar".</li>
+<li>Puedes añadir una nota en cualquier cliente.</li>
+<li>Tus cambios se guardan en este navegador. Cuando termines, pulsa <b>Enviar</b>.</li></ul></div>
+<div id="list"></div>
+<div class="bar"><button id="send">Enviar</button><button id="copy" class="sec">Copiar respuestas</button><span id="sent"></span></div>
+</main>
+<script>
+const DATA=[["Rayban","Italy",13000,1,"Florencia",0],["Bata","Spain",13000,2,"Florencia",0],["Simone Perele","France",12000,1,"Florencia",1],["Boohoo","UK",7720,1,"Florencia",0],["Reserved","Poland",7200,2,"Florencia",0],["French Connection","UK",6904,1,"Florencia",1],["One & Only Resorts","UAE",6500,1,"Florencia",0],["Montibello","Spain",6000,1,"Florencia",1],["Milk Shake","Italy",5800,4,"Florencia",0],["Decenio","Spain",5700,3,"Florencia",0],["Visual Crafters","Poland",5625,2,"Florencia",0],["Cyber Sweetie","UK",5000,1,"Florencia",0],["Cortana","Spain",4800,2,"Florencia",0],["Byan","Spain",4500,2,"Florencia",0],["Vivaia","USA",4500,2,"Florencia",0],["Simorra","Spain",4300,2,"Florencia",0],["Susmies","Spain",4200,3,"Florencia",0],["Semicouture","Italy",4000,2,"Florencia",0],["Triangl","Australia",4000,1,"Florencia",1],["Alohas","Spain",4000,1,"Florencia",0],["Matineé","Italy",4000,1,"Florencia",0],["Maison Hotel","Spain",4000,1,"Florencia",0],["Sophie&Lucie","Spain",3800,3,"Florencia",0],["Atelier Eme","Italy",3600,3,"Florencia",0],["Perfect Stranger","Australia",3500,1,"Florencia",0],["Ese o Ese","Spain",3500,1,"Florencia",1],["Bsoul","Spain",3000,2,"Florencia",0],["Nicoli Shop","Spain",3000,1,"Florencia",1],["Etam","France",3000,1,"Florencia",1],["Leni Swims","Australia",3000,1,"Florencia",1],["Nude Project","Spain",3000,1,"Florencia",0],["Column","USA",3000,1,"Florencia",1],["Velez Artisan","Spain",3000,1,"Florencia",1],["Effek","Italy",3000,1,"Florencia",0],["Slow Love","Spain",3000,2,"Florencia",0],["Natura Selection","Spain",3000,1,"Florencia",0],["Mexx","Netherlands",3000,1,"Florencia",0],["Daze Dayz","Italy",3000,1,"Florencia",1],["Allure Bridal","USA",3000,1,"Florencia",0],["Atelier Solana","Spain",3000,1,"Florencia",1],["Kiehl's","USA",0,0,"Florencia",1],["Kalk","Spain",2700,2,"Kath",0],["One Plus","China",2600,1,"Kath",0],["Justin Alexander","USA",2500,1,"Kath",0],["Quicksilver","USA",2500,1,"Kath",0],["Teddy Smith France","France",2500,2,"Kath",0],["Ecru","Spain",2400,2,"Kath",0],["CLUB L LONDON","UK",2290,1,"Kath",0],["Vidal & Vidal","Spain",2200,2,"Kath",0],["Vogana","Spain",2100,2,"Kath",0],["YSL Beauty","France",2056,2,"Kath",0],["Cider","Singapore",2000,1,"Kath",0],["HuaWei","China",2000,1,"Kath",0],["D.Franklin","Spain",2000,1,"Kath",0],["Nénés","France",2000,1,"Kath",0],["Zoe Kratzman","Australia",2000,1,"Kath",0],["Mamma Team","Spain",1950,2,"Paola",0],["ROXY","USA",1800,1,"Paola",0],["Beauty Works","UK",1735,1,"Paola",0],["Naf Naf","France",1600,1,"Paola",0],["Silvia Fernandez","Spain",1500,1,"Paola",0],["Cherubina","Spain",1500,1,"Paola",0],["Freixenet","Spain",1500,1,"Paola",0],["Isla Swim","Australia",1500,1,"Paola",0],["CELINE","France",1500,1,"Paola",0],["Peter Langner","Italy",1500,1,"Paola",0],["Dorking","Spain",1500,1,"Paola",0],["Victoria Colección","Spain",1400,1,"Paola",0],["Aldomartins","Spain",1400,1,"Paola",0],["Kuraudia","Spain",1333,1,"Paola",0],["Koraru","Hong Kong",1310,1,"Paola",0],["Bottega Veneta España","Spain",1300,2,"Paola",0],["Lois Jeans","Spain",1250,1,"Paola",0],["Vogue España","Spain",1250,1,"Paola",0],["Muji Europe","Spain",1200,1,"Paola",0],["MODALFA","Portugal",1200,1,"Paola",0],["Callas Milano","Italy",1200,1,"Paola",0],["Polin Et Moi","Spain",1100,1,"Paola",0],["Conde Nast","USA",1042,1,"Paola",0],["Dara Danenberg","USA",1000,1,"Paola",0],["SNOOP modelmanagement","Turkey",1000,1,"Paola",0],["La Comet","Spain",1000,1,"Paola",0],["Compañia Fantastica","Spain",1000,1,"Paola",0],["Raboesy","Hong Kong",1000,1,"Paola",0],["Lonbali","Spain",1000,1,"Paola",0],["Elfe11","Switzerland",1000,1,"Paola",0],["Ssstufff","Spain",1000,1,"Paola",0],["Ulibarri Joyeria","Spain",900,1,"Paola",0],["Loveart","Portugal",800,1,"Paola",0],["Ailanto","Spain",800,1,"Paola",0],["Paterns","Poland",800,1,"Paola",0],["Cotton Crown","Spain",750,1,"Paola",0],["Smile Media","Spain",674,2,"Paola",0],["Anna Mora","Spain",500,1,"Paola",0],["Hearst Italia","Italy",200,1,"Paola",0],["TwentyFour Seven Portugal","Portugal",60,1,"Paola",0],["WPP Production","UK",30,1,"Paola",0],["8 Artist Management","Unknown",0,0,"Paola",0]];
+const OPTS=["Florencia","Kath","Paola","Inactivo / quitar"];
+(function(){const L=document.getElementById("list");let cur="",tb=null,i=0;
+DATA.forEach(r=>{if(r[4]!==cur){cur=r[4];const tot=DATA.filter(x=>x[4]===cur);const h=document.createElement("h2");h.textContent="Propuesta: "+cur+" ("+tot.length+" clientes, €"+tot.reduce((a,x)=>a+x[2],0).toLocaleString("de-DE")+")";L.appendChild(h);const t=document.createElement("table");tb=document.createElement("tbody");t.appendChild(tb);L.appendChild(t);}
+i++;const tr=document.createElement("tr");
+const opts=OPTS.map(o=>"<option"+(o===r[4]?" selected":"")+">"+o+"</option>").join("");
+tr.innerHTML="<td class=c><b>"+r[0]+"</b>"+(r[5]?"<span>premium · un solo trabajo</span>":"")+"</td><td class=n>"+r[1]+"</td><td class=n>€"+r[2].toLocaleString("de-DE")+"</td><td class=n>"+r[3]+" trab.</td><td class=s><select data-kind=d data-id="+i+">"+opts+"</select></td><td class=t><input data-kind=n data-id="+i+" placeholder=Nota></td>";
+tb.appendChild(tr);});})();
+const AGENT="Pilar";
+const KEY="reparto-equipo-pilar-2026";
+const AT=["pat6ksoRm","7AEw9mh4"].join("")+"."+["cac2048275f84bbbd106af57b0d58253","354a4853e166d75a215fe5bdb7597adf"].join("");
+const API="https://api.airtable.com/v0/appUKTpb84iiPFEQr/tblmnyxaWpbO4iJT8";
+let state={};
+try{ state=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; }catch(e){ state={}; }
+function key(el){return el.dataset.kind+"_"+el.dataset.id+"_"+el.tagName.toLowerCase();}
+document.querySelectorAll("[data-id]").forEach(el=>{ const v=state[key(el)]; if(v!==undefined) el.value=v; const sv=()=>{ state[key(el)]=el.value; try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }; el.addEventListener("input",sv); el.addEventListener("change",sv); });
+function collect(){
+  const recs=[]; let sec=""; let n=0; const batch=new Date().toISOString();
+  document.querySelectorAll("h2, tr").forEach(node=>{
+    if(node.tagName==="H2"){ sec=node.textContent.trim(); return; }
+    const tds=node.querySelectorAll("td"); if(!tds.length) return; const name=tds[0].querySelector("b").textContent.trim(); const nums=[...tds].slice(1,-2).map(t=>t.textContent.trim()).join(" → "); const sel=node.querySelector("select"); const inp=node.querySelector("input"); n++; recs.push({fields:{Line:String(n).padStart(2,"0")+" "+name,Agent:AGENT,Section:sec,Item:name,Numbers:nums,Answer:sel?sel.value:"",Note:inp?inp.value.trim():"",Submitted:batch,Batch:batch}});
+  });
+  return recs;
+}
+function compileText(){ return collect().map(r=>r.fields.Item+": "+(r.fields.Answer||"")+(r.fields.Note?" – "+r.fields.Note:"")).join(String.fromCharCode(10)); }
+const sendBtn=document.getElementById("send"), sentEl=document.getElementById("sent");
+sendBtn.addEventListener("click",async()=>{
+  const recs=collect(); const answered=recs.filter(r=>r.fields.Answer||r.fields.Note).length;
+  if(!answered){ sentEl.textContent="Todavía no hay nada."; return; }
+  sendBtn.disabled=true; sentEl.textContent="Enviando…";
+  try{
+    for(let i=0;i<recs.length;i+=10){ const r=await fetch(API,{method:"POST",headers:{"Authorization":"Bearer "+AT,"Content-Type":"application/json"},body:JSON.stringify({records:recs.slice(i,i+10),typecast:true})}); if(!r.ok) throw new Error("HTTP "+r.status); }
+    sentEl.textContent="Enviado. ¡Gracias, Pilar! Wilbur ya tiene tu reparto ("+answered+" clientes). Si cambias algo, puedes volver y enviar otra vez.";
+  }catch(e){ sentEl.textContent="No se ha podido enviar ("+e.message+"). Pulsa Copiar respuestas y pégalas en un email a Wilbur."; }
+  sendBtn.disabled=false;
+});
+document.getElementById("copy").addEventListener("click",async()=>{
+  const body="Reparto clientes de Sol – Pilar"+String.fromCharCode(10)+compileText();
+  try{ await navigator.clipboard.writeText(body); sentEl.textContent="Copiado. Pégalo en un email o WhatsApp a Wilbur."; }
+  catch(e){ const ta=document.createElement("textarea"); ta.value=body; ta.style.width="100%"; ta.style.minHeight="240px"; sentEl.replaceWith(ta); ta.select(); }
+});
+</script></body></html>
